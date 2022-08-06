@@ -2,14 +2,15 @@
 #define GAME_H
 
 #include <random>
-#include "SDL.h"
+#include "SDL2/SDL.h"
 #include "controller.h"
 #include "renderer.h"
 #include "snake.h"
+#include "obstacle.h"
 
 class Game {
  public:
-  Game(std::size_t grid_width, std::size_t grid_height);
+  Game(std::size_t grid_width, std::size_t grid_height, float initialSpeed);
   void Run(Controller const &controller, Renderer &renderer,
            std::size_t target_frame_duration);
   int GetScore() const;
@@ -17,6 +18,8 @@ class Game {
 
  private:
   Snake snake;
+  float InitialSpeed;
+  std::vector<Obstacle> _obstacles;
   SDL_Point food;
 
   std::random_device dev;
@@ -26,6 +29,10 @@ class Game {
 
   int score{0};
 
+  void PlaceObstacles();
+  bool ObstaclesHit(int, int);
+  bool ObstaclesHit(SDL_Point);
+  bool IsPointAvailable(SDL_Point);
   void PlaceFood();
   void Update();
 };
